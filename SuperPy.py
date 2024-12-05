@@ -34,7 +34,7 @@ print(today_date)
 date_after_2_days = today_date + timedelta
 print(date_after_2_days)
 
-#python super.py --advance-time 2
+#(python super.py --advance-time 2)
 
 # bought.csv
 
@@ -90,18 +90,17 @@ with open ('sold.csv', 'r') as file:
 print(header)
 print(rows)
 '''
-#Which products the supermarket offers;
-alle verschillende product_names van id's die niet verkocht of over datum zijn
+#(Which products the supermarket offers;
+alle verschillende product_names van id s die niet verkocht of over datum zijn)
 
-#How many of each type of product the supermarket holds currently;
-het aantal id's van de aanwezige product_names
+#(How many of each type of product the supermarket holds currently;
+het aantal id's van de aanwezige product_names)
 
-#How much each product was bought for, and what its expiry date is;
-de buy_price en expiration_date per id
+#(How much each product was bought for, and what its expiry date is;
+de buy_price en expiration_date per id)
 
-#How much each product was sold for or if it expired, the fact that it did.
-de sell_price en of over datum per id
+#(How much each product was sold for or if it expired, the fact that it did.
+de sell_price en of over datum per id)
 '''
-
 if __name__ == "__main__":
     main()
