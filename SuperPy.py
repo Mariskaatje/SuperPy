@@ -38,6 +38,12 @@ print(date_after_2_days)
 
 # bought.csv
 
+id = input('Insert an id ')
+product_name = input('Insert a product name ')
+buy_date = input('Insert a buy date ')
+buy_price = input('Insert a buy price ')
+expiration_date = input('Insert an expiration date ')
+
 with open('bought.csv', 'w', newline='') as csvfile:
     fieldnames = ['id','product_name','buy_date','buy_price','expiration_date']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -61,7 +67,7 @@ with open('sold.csv', 'w', newline='') as csvfile:
 #DICTWRITER OBJECT IS NOT ITERABLE
 
         print(row['id'], row['bought_id'], ror['sell_date'], row['sell_price'])
-
+'''
 #bought.csv
    
 with open ('bought.csv', 'r') as file:
@@ -78,6 +84,11 @@ print(rows)
 
 #sold.csv
 
+id = input('Insert an id ')
+bought_id = input('Input a bought id ')
+sell_date = input('Insert a sell date ')
+sell_price = input('Insert a sell price ')
+
 with open ('sold.csv', 'r') as file:
    csvreader = csv.reader(file)
   # reader = next(csv.reader)
@@ -89,7 +100,7 @@ with open ('sold.csv', 'r') as file:
        rows.append(row)
 print(header)
 print(rows)
-'''
+
 #(Which products the supermarket offers;
 alle verschillende product_names van id s die niet verkocht of over datum zijn)
 
