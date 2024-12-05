@@ -18,15 +18,13 @@ print(today)
 
 # Van datetime naar string  
 
-datetime_to_string = today.datetime.strftime('%Y-%m-%d')
+datetime_to_string = today.strftime('%Y-%m-%d')
 
-#DATETIME.DATE OBJECT HAS NO ATTRIBUTE DATETIME
-
-print(date_to_string)
+print(datetime_to_string)
 
 # Van string naar datetime
 
-string_to_daytime = daytime.daytime.strptime(today_string, '%Y_%m_%d')
+string_to_datetime = datetime.datetime.strptime(today_string, '%Y_%m_%d')
 print(string_to_datetime)
 
 from datetime import timedelta
