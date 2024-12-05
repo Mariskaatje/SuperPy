@@ -1,7 +1,7 @@
 # Imports
 import argparse
 import csv
-from datetime import date
+import datetime
 
 # Do not change these lines.
 __winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
@@ -13,7 +13,7 @@ def main():
 
 # Vaststellen welke dag het is.
 
-today = date.today()
+today = datetime.date.today()
 print(today)
 
 # Van datetime naar string  
