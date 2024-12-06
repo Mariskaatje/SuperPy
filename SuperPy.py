@@ -48,58 +48,32 @@ with open('bought.csv', 'w', newline='') as csvfile:
     fieldnames = ['id','product_name','buy_date','buy_price','expiration_date']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                                                          
-    writer.writeheader()
-    for row in writer:
-
-#DICTWRITER OBJECT IS NOT ITERABLE
-
-        print(row['id'], row['product_name'], row['buy_date'], row ['buy_price'], row['expiration_date'])
-
 # sold.csv    
-
-with open('sold.csv', 'w', newline='') as csvfile:
-    fieldnames = ['id','bought_id','sell_date','sell_price']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-    writer.writeheader()
-    for row in writer:
-
-#DICTWRITER OBJECT IS NOT ITERABLE
-
-        print(row['id'], row['bought_id'], ror['sell_date'], row['sell_price'])
-'''
-#bought.csv
-   
-with open ('bought.csv', 'r') as file:
-   csvreader = csv.reader(file)
-  # reader = next(csv.reader)
-
-   for line in reader:
-       print(line)
-
-   for row in csv.reader:
-       rows.append(row)
-print(header)
-print(rows)
-
-#sold.csv
 
 id = input('Insert an id ')
 bought_id = input('Input a bought id ')
 sell_date = input('Insert a sell date ')
 sell_price = input('Insert a sell price ')
 
-with open ('sold.csv', 'r') as file:
+with open('sold.csv', 'w', newline='') as csvfile:
+    fieldnames = ['id','bought_id','sell_date','sell_price']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+#bought.csv
+
+with open ('bought.csv', 'r') as csvfile:
    csvreader = csv.reader(file)
-  # reader = next(csv.reader)
+   reader = csv.DictReader(csvfile)
+   for row in reader:
+      print(row['id'], row['product_name'], row['buy_date'], row['buy_price'], row['expiration_date'])
 
-   for line in reader:
-       print(line)
+#sold.csv
 
-   for row in csv.reader:
-       rows.append(row)
-print(header)
-print(rows)
+with open ('sold.csv', 'r') as csvfile:
+   csvreader = csv.reader(file)
+   reader = csv.DictReader(csvfile)
+   for row in reader:
+      print(row['id'], row['bought_id'], row['sell_date'], row['sell_price'])
 
 #(Which products the supermarket offers;
 alle verschillende product_names van id s die niet verkocht of over datum zijn)
