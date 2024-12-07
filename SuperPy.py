@@ -11,7 +11,7 @@ __human_name__ = "superpy"
 def main():
     pass
 
-# Vaststellen welke dag het is.
+# Vaststellen welke dag het is
 
 today = datetime.date.today()
 print(today)
@@ -24,8 +24,8 @@ print(datetime_to_string)
 
 # Van string naar datetime
 
-string_to_datetime = datetime.datetime.strptime(today_string, '%Y_%m_%d')
-print(string_to_datetime)
+#string_to_datetime = datetime.datetime.strptime(today_string, '%Y_%m_%d')
+#print(string_to_datetime)
 
 from datetime import timedelta
 today_date = datetime.date.today()
@@ -38,43 +38,96 @@ print(date_after_2_days)
 
 # bought.csv
 
-id = input('Insert an id ')
-product_name = input('Insert a product name ')
-buy_date = input('Insert a buy date ')
-buy_price = input('Insert a buy price ')
-expiration_date = input('Insert an expiration date ')
+while True:
+    id_input = input('Voer een id in ')
+    if id_input != '':
+       print(f'Ingevoerde id: (id_input)')
+    else:
+        print('Invoer mag niet leeg zijn.')
+        break   
+
+while True:
+    product_name_input = input('Voer een product_name in ')
+    if product_name_input != '':
+       print(f'Ingevoerde product_name: (product_name_input)')
+    else:
+        print('Invoer mag niet leeg zijn.')
+        break 
+
+while True:
+    buy_date_input = input('Voer een buy_date in ')
+    if buy_date_input != '':
+       print(f'Ingevoerde buy_date: (buy_date_input)')
+    else:
+        print('Invoer mag niet leeg zijn.')
+        break   
+
+while True:
+    buy_price_input = input('Voer een buy_price in ')
+    if buy_price_input != '':
+       print(f'Ingevoerde buy_price: (buy_price_input)')
+    else:
+        print('Invoer mag niet leeg zijn.')
+        break   
+
+while True:
+    expiration_date_input = input('Voer een expiration_date in ')
+    if expiration_date_input != '':
+       print(f'Ingevoerde expiration-date: (expiration_date_input)')
+    else:
+        print('Invoer mag niet leeg zijn.')
+        break   
+
+while True:
+    bought_id_input = input('Voer een bought_id in ')
+    if bought_id_input != '':
+       print(f'Ingevoerde bought_id: (bought_id_input)')
+    else:
+        print('Invoer mag niet leeg zijn.')
+        break   
+
+while True:
+    sell_date_input = input('Voer een sell_date in ')
+    if sell_date_input != '':
+       print(f'Ingevoerde sell_date: (sell_date_input)')
+    else:
+        print('Invoer mag niet leeg zijn.')
+        break   
+
+while True:
+    sell_price_input = input('Voer een sell_price in ')
+    if sell_price_input != '':
+       print(f'Ingevoerde sell_price: (sell_price_input)')
+    else:
+        print('Invoer mag niet leeg zijn.')
+        break   
+'''
+#bought.csv
 
 with open('bought.csv', 'w', newline='') as csvfile:
-    fieldnames = ['id','product_name','buy_date','buy_price','expiration_date']
+    fieldnames = ['id_input','product_name','buy_date','buy_price','expiration_date']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                                                         
-# sold.csv    
-
-id = input('Insert an id ')
-bought_id = input('Input a bought id ')
-sell_date = input('Insert a sell date ')
-sell_price = input('Insert a sell price ')
+   
+#sold.csv
 
 with open('sold.csv', 'w', newline='') as csvfile:
     fieldnames = ['id','bought_id','sell_date','sell_price']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
+'''
 #bought.csv
 
 with open ('bought.csv', 'r') as csvfile:
-   csvreader = csv.reader(file)
-   reader = csv.DictReader(csvfile)
+   reader = csv.DictReader('bought.csv')
    for row in reader:
       print(row['id'], row['product_name'], row['buy_date'], row['buy_price'], row['expiration_date'])
 
 #sold.csv
 
-with open ('sold.csv', 'r') as csvfile:
-   csvreader = csv.reader(file)
+with open ('sold.csv', 'r') as csvfile:   
    reader = csv.DictReader(csvfile)
    for row in reader:
-      print(row['id'], row['bought_id'], row['sell_date'], row['sell_price'])
-
+    print(row['id'], row['bought_id'], row['sell_date'], row['sell_price'])
+'''
 #(Which products the supermarket offers;
 alle verschillende product_names van id s die niet verkocht of over datum zijn)
 
