@@ -1,6 +1,6 @@
 SUPERPY
 
-Met deze applicaie kunt u bijvoorbeeld de inventaris van een supermarkt monitoren.
+Met deze applicatie kunt u bijvoorbeeld de inventaris van een supermarkt monitoren.
 
 De volgende eigenschappen zijn ingebouwd:
 
