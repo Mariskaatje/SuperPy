@@ -158,3 +158,69 @@ print(f'De verkoopprijs en of over datum per product is{[ID][verkoopprijs][of ov
 if __name__ == "__main__":
     main()
 
+# Imports
+import argparse
+import csv
+import datetime
+
+# Do not change these lines.
+__winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
+__human_name__ = "superpy"
+
+# Your code below this line.
+def main():
+    pass
+
+# Vaststellen welke dag het is.
+
+today = datetime.date.today()
+print(f'Datum: {today}')
+
+# Van datetime naar string  
+
+datetime_to_string = today.strftime('%Y-%m-%d')
+
+print(f'Het is vandaag {datetime_to_string}')
+
+# Van string naar datetime
+
+# string_to_datetime = datetime.datetime.strptime(today_string, '%Y_%m_%d')
+# print(string_to_datetime)
+
+from datetime import timedelta
+today_date = datetime.date.today()
+
+number = int(input('Hoeveel dagen wilt u de datum vooruit zetten?' ))
+timedelta = datetime.timedelta(days=number)
+date_after_number_days = today_date + timedelta
+print(f'Over {number} dagen is het {date_after_number_days}')
+
+# (python super.py --advance-time 2)
+
+# products.csv
+
+# Interactieve invoer van productgegevens
+products = []
+while True:
+    id = input('Voer de id in ')
+    product_name = input('Voer de product_name in ')
+    bought_date = input('Voer de bought_date in ')
+    bought_price = float(input('Voer de bought_price in '))
+    expiration_date = input('Voer de expiration_date in ')
+    sell_date = input('Voer de sell_date in ')
+    sell_price = input('Voer de sell_price in ')
+    
+    products.append({'id': id, 'product_name': product_name, 'bought_date': bought_date, 'bought_price': bought_price, 'expiration_date': expiration_date, 'sell_date': sell_date, 'sell_price': sell_price})
+    
+    doorgaan = input("Wil je nog een product toevoegen? (ja/nee): ").lower()
+    if doorgaan != "ja":
+        break
+
+# CSV-bestand schrijven
+with open('products', "w", newline="") as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['id', 'product_name', 'bought_date', 'bought_price', 'expiration_date', 'sell_date', 'sell_price'])
+    for product in products:
+        writer.writerow([product['id'], product['product_name'], product['bought_date'], product['bought_price'], product['expiration_date'], product['sell_date'], product['sell_price']])
+
+print(f"Productgegevens zijn opgeslagen in 'products' {products}")
