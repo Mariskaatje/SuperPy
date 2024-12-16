@@ -294,26 +294,51 @@ print(f"Productgegevens zijn opgeslagen in 'products' {products}")
 
 # Totaal aantal gekochte en verkochte producten op bepaalde datum vaststellen
 
-datum = import('Voor welke datum (YYYY-MM-DD) wilt u het totale aantal gekochte en verkochte producten weten? ')
+datum = input('Voor welke datum (YYYY-MM-DD) wilt u het totale aantal gekochte en verkochte producten weten? ')
 
-def totaal_producten_met_bought_date(csv_file, datum):
-    totaal = 0
+def totaal_bought(csvfile, datum):
+    totaal_bought = 0
     with open(csv_bestand, 'r') as file:
         reader = csv.DictReader(file)
         for rij in reader:
             if rij['bought_date'] == datum:
-                totaal += 1
-    return totaal
+                totaal_bought += 1
+    return totaal_bought
 
-def totaal_producten_met_sell_date(csv_file, datum):
-    totaal1 = 0
+def totaal_sold(csvfile, datum):
+    totaal_sold = 0
     with open(csv_bestand, 'r') as file:
         reader = csv.DictReader(file)
         for rij in reader:
             if rij['sell_date'] == datum:
-                totaal1 += 1
-    return totaal1
+                totaal_sold += 1
+    return totaal_sold
 
-print(f"Totaal aantal gekochte producten op {datum}: {totaal} en aantal verkochte producten op {datum}: {totaa1l}")
+print(f"Totaal aantal gekochte producten op {datum}: {totaal_bought} en aantal verkochte producten op {datum}: {totaal_sold}")
 
 # Opbrengst en winst over bepaalde periode vaststellen
+
+import pandas as pd
+
+csv_bestand = "products.csv"
+data = pd.read_csv(csvfile)
+
+data['bought_date'] = pd.to_datetime(data['bought_date'])
+data['sell_date'] = pd.to_datetime(data['sell_date'])
+data['expiration_date'] = pd.to_datetime(data['expiration_date'])
+
+data['winst'] = data['sell_price'] - data['bought_price']
+
+start_datum = input('Wat is de startdatum (YYYY-MM-DD) van de periode waarover u de opbrengst en winst wilt weten? ')
+eind_datum = input('Wat is de einddatum (YYYY-MM-DD) van de periode waarover u de opbrengst en winst wilt weten? )')
+
+gefilterde_data = data[(data['sell_date'] >= start_datum) & (data['sell_date'] <= eind_datum)]
+
+totale_opbrengst = gefilterde_data['sell_price'].sum()
+totale_winst = gefilterde_data['winst'].sum()
+
+print(f"Totale opbrengst van {start_datum} tot {eind_datum}: €{totale_opbrengst}")
+print(f"Totale winst van {start_datum} tot {eind_datum}: €{totale_winst}")
+
+if __name__ == "__main__":
+    main()
