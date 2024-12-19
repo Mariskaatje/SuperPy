@@ -5,8 +5,8 @@ Met deze applicatie kunt u bijvoorbeeld de inventaris van een supermarkt monitor
 De volgende eigenschappen zijn ingebouwd:
 
 * Het vaststellen en vooruitzetten van de datum.
-* Het weergeven van de aan- en verrkoop van producten op een bepaalde datum.
+* Het bijhouden van de aan- en verrkoop van producten op een bepaalde datum.
 * Het weergeven van de opbrengst en de winst over een bepaalde tijdsperiode.
 * Het exporteren van selecties aan data naar CSV-files.
 
-Met Matplotlib worden de verkoopcijfers van de verschilende producten op een bepaalde dag gevisualiseerd.  
+Met Matplotlib worden de aanwezigheid van de verschilende producten op een bepaalde dag gevisualiseerd.  
