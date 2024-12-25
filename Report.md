@@ -9,4 +9,4 @@ De volgende eigenschappen zijn ingebouwd:
 * Het weergeven van de opbrengst en de winst over een bepaalde tijdsperiode.
 * Het exporteren van selecties aan data naar CSV-files.
 
-Met Matplotlib worden de aanwezigheid van de verschilende producten op een bepaalde dag gevisualiseerd.  
+Met Matplotlib worden de opbrengst en winst op een bepaalde dag gevisualiseerd.  
