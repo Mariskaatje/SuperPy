@@ -16,6 +16,6 @@ De volgende eigenschappen zijn ingebouwd:
 * Het weergeven van de opbrengst en de winst over een bepaalde tijdsperiode.
 * Het exporteren van selecties aan data naar CSV-files.
 
-Met Matplotlib worden de opbrengst en winst over een bepaalde periode gevisualiseerd. Deze periode kan zelf ingesteld worden. De gegevens worden weergegeven in een boxplot.
+Met Matplotlib worden de opbrengst en winst over een bepaalde periode gevisualiseerd. Deze periode kan zelf ingesteld worden. De gegevens worden weergegeven in een lijngrafiek met maandelijkse meetpunten.
 
 Met behulp van de mudule Rich, het onderdeel print, zijn kleuren in de tekst aangebracht wat de leesbaarheid bbevorderd.
