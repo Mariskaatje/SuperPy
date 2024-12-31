@@ -1,12 +1,14 @@
 SUPERPY
 
-Met deze applicatie kunt u bijvoorbeeld de inventaris van een supermarkt monitoren.
+Met deze applicatie kunt u een voorraad van producten beheren, bijvoorbeeld de inventaris van een supermarkt. Informatie over de produten en de aan-, verkoop- en houdbaarheidsdatum kunnen verwerkt worden. Producten die over de houdbaarheidsdatum zijn worden uit het bestand verwijdederd. De datum kan kunstmatig naar voren geschoven worden om een beeld van de toekomst te verkrijgen. 
 
 De volgende eigenschappen zijn ingebouwd:
 
 * Het vaststellen en vooruitzetten van de datum.
-* Het bijhouden van de aan- en verrkoop van producten op een bepaalde datum.
+* Het bijhouden van de aan- en verkoop van producten op een bepaalde datum.
 * Het weergeven van de opbrengst en de winst over een bepaalde tijdsperiode.
 * Het exporteren van selecties aan data naar CSV-files.
 
-Met Matplotlib worden de opbrengst en winst op een bepaalde dag gevisualiseerd.  
+Met Matplotlib worden de opbrengst en winst over een bepaalde periode gevisualiseerd. Deze periode kan zelf ingesteld worden. De gegevens worden weergegeven in een boxplot.
+
+Met behulp van de mudule Rich, het onderdeel print, zijn kleuren in de tekst aangebracht wat de leesbaarheid bbevorderd.
