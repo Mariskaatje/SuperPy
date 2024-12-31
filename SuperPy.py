@@ -2,7 +2,6 @@
 import argparse
 import csv
 import datetime
-from rich import print
 
 # Do not change these lines.
 __winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
@@ -50,7 +49,32 @@ while True:
        print("Ongeldige invoer, probeer het opnieuw.")   
        
 # products.csv 
-       
+'''
+# Invoer van productgegevens
+
+products.csv = []
+while True:
+    id = input('Voer de id in ')
+    product_name = input('Voer de product_name in ')
+    bought_date = input('Voer de bought_date (YYYY-MM-DD) in ')
+    bought_price = float(input('Voer de bought_price in '))
+    expiration_date = input('Voer de expiration_date in (YYYY-MM-DD)')
+    sell_date = input('Voer de sell_date (YYYY-MM-DD) in ')
+
+    expiration_date = datetime.strptime(expiration_date, "%Y-%m-%d").date()    
+    if today >= expiration_date:
+       sell_price = 'expired'
+       print('The item is no longer available for sale.')
+    else:
+       print('The item is still available for sale.')   
+       sell_price = float(input('Voer de sell_price in '))
+
+       products.append({'id': id, 'product_name': product_name, 'bought_date': bought_date, 'bought_price': bought_price, 'expiration_date': expiration_date, 'sell_date': sell_date, 'sell_price': sell_price})
+    
+       doorgaan = input("Wilt u nog een product toevoegen? (ja/nee): ").lower()
+          if doorgaan != "ja":
+             break
+'''       
 from datetime import datetime, date
 
 products = []
@@ -108,18 +132,17 @@ print("\nToegevoegde producten:")
 for product in products:
     print(product)
 
-'''
 # CSV-file schrijven
-with open('products', "w", newline="") as csvfile:
+with open('products.csv', "w", newline="") as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['id', 'product_name', 'bought_date', 'bought_price', 'expiration_date', 'sell_date', 'sell_price'])
     for product in products:
         writer.writerow([product['id'], product['product_name'], product['bought_date'], product['bought_price'], product['expiration_date'], product['sell_date'], product['sell_price']])
 
-print(f"Productgegevens zijn opgeslagen in 'products' {products}")
-'''
+print(f"Productgegevens zijn opgeslagen in 'products.csv' {products}")
+
 # Opbrengst en winst over bepaalde periode vaststellen
-'''
+
 import pandas as pd
 
 csvfile = "products.csv"
@@ -151,6 +174,6 @@ with open('data/small.txt', 'r') as f:
 datetime = data['date']
 dayofyear = data['revenue']
 temperature = data['profit']
-'''
+
 if __name__ == "__main__":
     main()
