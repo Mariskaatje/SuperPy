@@ -40,74 +40,74 @@ while True:
        number = int(input('Hoeveel dagen wilt u de datum vooruit zetten?'))
        today_date = datetime.now()
        date_after_number_days = today_date + timedelta(days=number)
-       print(f'De datum na {number} dagen is: {date_after_number_days.strftime("%Y-%m-%d")}')
        if number == 1:
-          print(f'Over 1 dag is het {date_after_number_days}')
+          print(f'Over 1 dag is het {date_after_number_days.strftime("%Y-%m-%d")}')
        else:
-          print(f'Over {number} dagen is het {date_after_number_days}')
+          print(f'Over {number} dagen is het {date_after_number_days.strftime("%Y-%m-%d")}')
+       break
     else:
        print("Ongeldige invoer, probeer het opnieuw.")   
-
-# products.csv
-
-# Invoer van productgegevens
+       
+# products.csv 
+       
+from datetime import datetime, date
 
 products = []
+today = date.today()  # Verkrijg de huidige datum
+
 while True:
-    id = input('Voer de id in ')
-    product_name = input('Voer de product_name in ')
-    bought_date = input('Voer de bought_date (YYYY-MM-DD) in ')
-    bought_price = float(input('Voer de bought_price in '))
-    expiration_date = input('Voer de expiration_date in (YYYY-MM-DD)')
-    sell_date = input('Voer de sell_date (YYYY-MM-DD) in ')
-        
-    if today >= expiration_date:
-       sell_price = 'expired'
-       print("The item is no longer available for sale.")
-
-from datetime import datetime
-
-def check_item_availability(expiration_date_str, today_str=None):
-    """
-    Checks if an item is available for sale based on its expiration date.
-
-    :param expiration_date_str: The expiration date in 'YYYY-MM-DD' format.
-    :param today_str: (Optional) The current date in 'YYYY-MM-DD' format. Defaults to today's date.
-    :return: A tuple (status, message), where status is either 'available' or 'expired'.
-    """
+    # Invoer van productgegevens
+    id = input('Voer de id in: ')
+    product_name = input('Voer de product_name in: ')
+    
     try:
-        # Parse the expiration date
-        expiration_date = datetime.strptime(expiration_date_str, "%Y-%m-%d").date()
-        
-        # Use today's date if not provided
-        today = datetime.strptime(today_str, "%Y-%m-%d").date() if today_str else datetime.today().date()
-        
-        # Check the item's availability
-        if today >= expiration_date:
-            return 'expired', "The item is no longer available for sale."
-        else:
-            return 'available', "The item is still available for sale."
-    
-    except ValueError as e:
-        return 'error', f"Invalid date format: {e}"
+        bought_date = datetime.strptime(input('Voer de bought_date (YYYY-MM-DD) in: '), "%Y-%m-%d").date()
+        expiration_date = datetime.strptime(input('Voer de expiration_date (YYYY-MM-DD) in: '), "%Y-%m-%d").date()
+        sell_date = datetime.strptime(input('Voer de sell_date (YYYY-MM-DD) in: '), "%Y-%m-%d").date()
+    except ValueError:
+        print("Ongeldige datum ingevoerd. Probeer opnieuw.")
+        continue
 
-# Example usage
-expiration_date = "2024-12-25"
-today = "2024-12-28"  # Optional; can be omitted to use the current date
-status, message = check_item_availability(expiration_date, today)
-print(f"Status: {status}, Message: {message}")
+    try:
+        bought_price = float(input('Voer de bought_price in: '))
+    except ValueError:
+        print("Ongeldige prijs ingevoerd. Probeer opnieuw.")
+        continue
 
- 
+    # Controleer op verlopen product
+    if today >= expiration_date:
+        sell_price = 'expired'
+        print('Het product is verlopen en niet meer beschikbaar voor verkoop.')
     else:
-        sell_price = float(input('Voer de sell_price in '))
+        print('Het product is nog beschikbaar voor verkoop.')
+        try:
+            sell_price = float(input('Voer de sell_price in: '))
+        except ValueError:
+            print("Ongeldige verkoopprijs ingevoerd. Probeer opnieuw.")
+            continue
 
-products.append({'id': id, 'product_name': product_name, 'bought_date': bought_date, 'bought_price': bought_price, 'expiration_date': expiration_date, 'sell_date': sell_date, 'sell_price': sell_price})
+    # Product toevoegen aan de lijst
+    products.append({
+        'id': id,
+        'product_name': product_name,
+        'bought_date': bought_date,
+        'bought_price': bought_price,
+        'expiration_date': expiration_date,
+        'sell_date': sell_date,
+        'sell_price': sell_price
+    })
     
-while True:
-   doorgaan = input("Wil je nog een product toevoegen? (ja/nee): ").lower()
-   if doorgaan != "ja":
-      break
+    # Vraag of er meer producten toegevoegd moeten worden
+    doorgaan = input("Wilt u nog een product toevoegen? (ja/nee): ").lower()
+    if doorgaan != "ja":
+        break
 
+# Print de lijst van producten
+print("\nToegevoegde producten:")
+for product in products:
+    print(product)
+
+'''
 # CSV-file schrijven
 with open('products', "w", newline="") as csvfile:
     writer = csv.writer(csvfile)
@@ -141,8 +141,15 @@ totale_winst = gefilterde_data['winst'].sum()
 print(f"Totale opbrengst van {start_datum} tot {eind_datum}: €{totale_opbrengst}")
 print(f"Totale winst van {start_datum} tot {eind_datum}: €{totale_winst}")
 
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 
+with open('data/small.txt', 'r') as f:
+    data = np.genfromtxt(f, dtype='datetime64[s],f,f,f', 
+                         names=['date', 'revenue', 'profit'])
+datetime = data['date']
+dayofyear = data['revenue']
+temperature = data['profit']
+'''
 if __name__ == "__main__":
     main()
