@@ -49,10 +49,10 @@ while True:
        print("Ongeldige invoer, probeer het opnieuw.")   
        
 # products.csv 
-'''
+
 # Invoer van productgegevens
 
-products.csv = []
+products = []
 while True:
     id = input('Voer de id in ')
     product_name = input('Voer de product_name in ')
@@ -72,9 +72,9 @@ while True:
        products.append({'id': id, 'product_name': product_name, 'bought_date': bought_date, 'bought_price': bought_price, 'expiration_date': expiration_date, 'sell_date': sell_date, 'sell_price': sell_price})
     
        doorgaan = input("Wilt u nog een product toevoegen? (ja/nee): ").lower()
-          if doorgaan != "ja":
-             break
-'''       
+       if doorgaan != 'ja':
+          break
+      
 from datetime import datetime, date
 
 products = []
@@ -167,13 +167,79 @@ print(f"Totale winst van {start_datum} tot {eind_datum}: €{totale_winst}")
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+'''
 with open('data/small.txt', 'r') as f:
     data = np.genfromtxt(f, dtype='datetime64[s],f,f,f', 
                          names=['date', 'revenue', 'profit'])
 datetime = data['date']
 dayofyear = data['revenue']
 temperature = data['profit']
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Adjust file path as necessary
+file_path = 'data/small.txt'
+
+# Ensure the data file structure matches the dtype
+dtype = [('date', 'datetime64[s]'), ('revenue', 'f4'), ('profit', 'f4')]
+
+# Read the file using genfromtxt
+try:
+    data = np.genfromtxt(file_path, delimiter=',', dtype=dtype, names=True)
+    
+    # Extract columns
+    datetime = data['date']
+    revenue = data['revenue']
+    profit = data['profit']
+
+    # Example plot (adjust according to your requirements)
+    plt.figure(figsize=(10, 6))
+    plt.plot(datetime, revenue, label='Revenue')
+    plt.plot(datetime, profit, label='Profit')
+    plt.xlabel('Date')
+    plt.ylabel('Values')
+    plt.title('Revenue and Profit Over Time')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+except FileNotFoundError:
+    print(f"File {file_path} not found. Ensure the path is correct.")
+except ValueError as e:
+    print(f"Data format issue: {e}")
+'''
+import matplotlib.pyplot as plt
+
+# Een grafiek van het verloop van opbrengst en winst over de gevraagde periode met maandelijkse meetpunten
+
+data = {
+    'Datum': pd.date_range(start=start_datum, end=eind_datum, freq='ME'),
+    #'Opbrengst': [5000, 5200, 5100, 5300, 5500, 5700, 5900, 6000, 6200, 6100, 6300, 6400],
+    #'Winst': [800, 850, 830, 900, 950, 1000, 1050, 1100, 1150, 1130, 1200, 1250]
+}
+
+# DataFrame maken
+df = pd.DataFrame(data)
+
+# Zet de datumkolom als index (optioneel, handig voor tijdreeksen)
+#df.set_index('Datum', inplace=True)
+
+# Plot de gegevens
+plt.figure(figsize=(10, 6))
+plt.plot(df.index, df['Opbrengst'], label='Opbrengst', marker='o')
+plt.plot(df.index, df['Winst'], label='Winst', marker='s')
+
+# Voeg labels en titel toe
+plt.title('Opbrengst en Winst Over Tijd')
+plt.xlabel('Datum')
+plt.ylabel('Bedrag (€)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+
+# Toon de grafiek
+plt.show()
 
 if __name__ == "__main__":
     main()
