@@ -52,30 +52,7 @@ while True:
 
 # Invoer van productgegevens
 
-products = []
-while True:
-    id = input('Voer de id in ')
-    product_name = input('Voer de product_name in ')
-    bought_date = input('Voer de bought_date (YYYY-MM-DD) in ')
-    bought_price = float(input('Voer de bought_price in '))
-    expiration_date = input('Voer de expiration_date in (YYYY-MM-DD)')
-    sell_date = input('Voer de sell_date (YYYY-MM-DD) in ')
-
-    expiration_date = datetime.strptime(expiration_date, "%Y-%m-%d").date()    
-    if today >= expiration_date:
-       sell_price = 'expired'
-       print('The item is no longer available for sale.')
-    else:
-       print('The item is still available for sale.')   
-       sell_price = float(input('Voer de sell_price in '))
-
-       products.append({'id': id, 'product_name': product_name, 'bought_date': bought_date, 'bought_price': bought_price, 'expiration_date': expiration_date, 'sell_date': sell_date, 'sell_price': sell_price})
-    
-       doorgaan = input("Wilt u nog een product toevoegen? (ja/nee): ").lower()
-       if doorgaan != 'ja':
-          break
-      
-from datetime import datetime, date
+krom datetime import datetime, date
 
 products = []
 today = date.today()  # Verkrijg de huidige datum
@@ -145,25 +122,56 @@ print(f"Productgegevens zijn opgeslagen in 'products.csv' {products}")
 
 import pandas as pd
 
+# CSV-bestand inlezen
 csvfile = "products.csv"
-data = pd.read_csv(csvfile)
+try:
+    data = pd.read_csv(csvfile)
+except FileNotFoundError:
+    print(f"Het bestand '{csvfile}' kon niet worden gevonden.")
+    exit()
 
-data['bought_date'] = pd.to_datetime(data['bought_date'])
-data['sell_date'] = pd.to_datetime(data['sell_date'])
-data['expiration_date'] = pd.to_datetime(data['expiration_date'])
+# Datumkolommen omzetten naar datetime-formaat
+try:
+    data['bought_date'] = pd.to_datetime(data['bought_date'])
+    data['sell_date'] = pd.to_datetime(data['sell_date'])
+    data['expiration_date'] = pd.to_datetime(data['expiration_date'])
+except KeyError as e:
+    print(f"Verwachte kolom ontbreekt in het bestand: {e}")
+    exit()
 
-data['winst'] = data['sell_price'] - data['bought_price']
+# Winst berekenen
+try:
+    data['winst'] = data['sell_price'] - data['bought_price']
+except KeyError as e:
+    print(f"Verwachte kolom ontbreekt in het bestand: {e}")
+    exit()
 
-start_datum = input('Wat is de startdatum (YYYY-MM-DD) van de periode waarover u de opbrengst en winst wilt weten? ')
-eind_datum = input('Wat is de einddatum (YYYY-MM-DD) van de periode waarover u de opbrengst en winst wilt weten? )')
+# Periode opvragen van de gebruiker
+while True:
+    try:
+        start_datum = pd.to_datetime(input('Wat is de startdatum (YYYY-MM-DD) van de periode waarover u de opbrengst en winst wilt weten? '))
+        eind_datum = pd.to_datetime(input('Wat is de einddatum (YYYY-MM-DD) van de periode waarover u de opbrengst en winst wilt weten? '))
+        if start_datum > eind_datum:
+            print("De startdatum kan niet na de einddatum liggen. Probeer het opnieuw.")
+            continue
+        break
+    except ValueError:
+        print("Ongeldige invoer. Gebruik het formaat YYYY-MM-DD.")
 
+# Data filteren binnen de opgegeven periode
 gefilterde_data = data[(data['sell_date'] >= start_datum) & (data['sell_date'] <= eind_datum)]
 
-totale_opbrengst = gefilterde_data['sell_price'].sum()
-totale_winst = gefilterde_data['winst'].sum()
+# Opbrengst en winst berekenen
+if not gefilterde_data.empty:
+    totale_opbrengst = gefilterde_data['sell_price'].sum()
+    totale_winst = gefilterde_data['winst'].sum()
 
-print(f"Totale opbrengst van {start_datum} tot {eind_datum}: €{totale_opbrengst}")
-print(f"Totale winst van {start_datum} tot {eind_datum}: €{totale_winst}")
+    print(f"\nResultaten voor de periode van {start_datum.date()} tot {eind_datum.date()}:")
+    print(f"Totale opbrengst: €{totale_opbrengst:.2f}")
+    print(f"Totale winst: €{totale_winst:.2f}")
+else:
+    print(f"Geen verkopen gevonden tussen {start_datum.date()} en {eind_datum.date()}.")
+
 
 import numpy as np
 import matplotlib.pyplot as plt
