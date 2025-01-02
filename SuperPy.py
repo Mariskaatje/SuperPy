@@ -33,8 +33,8 @@ from datetime import datetime, timedelta
 #today_date = datetime.date.today()
 
 while True:  
-    datum_vooruit = input('Wilt u de datum vooruit zetten? (ja/nee): ').strip().lower()
-    if datum_vooruit == "nee":
+    datum_vooruit = input('Wilt u de datum vooruit zetten? (ja/nee) ').strip().lower()
+    if datum_vooruit == 'nee':
        break
     elif datum_vooruit == 'ja':
        number = int(input('Hoeveel dagen wilt u de datum vooruit zetten?'))
@@ -46,13 +46,13 @@ while True:
           print(f'Over {number} dagen is het {date_after_number_days.strftime("%Y-%m-%d")}')
        break
     else:
-       print("Ongeldige invoer, probeer het opnieuw.")   
+       print('Ongeldige invoer, probeer het opnieuw.')   
        
 # products.csv 
 
 # Invoer van productgegevens
 
-krom datetime import datetime, date
+from datetime import datetime, date
 
 products = []
 today = date.today()  # Verkrijg de huidige datum
@@ -63,17 +63,17 @@ while True:
     product_name = input('Voer de product_name in: ')
     
     try:
-        bought_date = datetime.strptime(input('Voer de bought_date (YYYY-MM-DD) in: '), "%Y-%m-%d").date()
-        expiration_date = datetime.strptime(input('Voer de expiration_date (YYYY-MM-DD) in: '), "%Y-%m-%d").date()
-        sell_date = datetime.strptime(input('Voer de sell_date (YYYY-MM-DD) in: '), "%Y-%m-%d").date()
+        bought_date = datetime.strptime(input('Voer de bought_date (YYYY-MM-DD) in '), "%Y-%m-%d").date()
+        expiration_date = datetime.strptime(input('Voer de expiration_date (YYYY-MM-DD) in '), "%Y-%m-%d").date()
+        sell_date = datetime.strptime(input('Voer de sell_date (YYYY-MM-DD) in '), "%Y-%m-%d").date()
     except ValueError:
-        print("Ongeldige datum ingevoerd. Probeer opnieuw.")
+        print('Ongeldige datum ingevoerd. Probeer opnieuw.')
         continue
 
     try:
-        bought_price = float(input('Voer de bought_price in: '))
+        bought_price = float(input('Voer de bought_price in '))
     except ValueError:
-        print("Ongeldige prijs ingevoerd. Probeer opnieuw.")
+        print('Ongeldige prijs ingevoerd. Probeer opnieuw.')
         continue
 
     # Controleer op verlopen product
@@ -85,7 +85,7 @@ while True:
         try:
             sell_price = float(input('Voer de sell_price in: '))
         except ValueError:
-            print("Ongeldige verkoopprijs ingevoerd. Probeer opnieuw.")
+            print('Ongeldige verkoopprijs ingevoerd. Probeer opnieuw.')
             continue
 
     # Product toevoegen aan de lijst
@@ -100,12 +100,12 @@ while True:
     })
     
     # Vraag of er meer producten toegevoegd moeten worden
-    doorgaan = input("Wilt u nog een product toevoegen? (ja/nee): ").lower()
-    if doorgaan != "ja":
+    doorgaan = input('Wilt u nog een product toevoegen? (ja/nee) ').lower()
+    if doorgaan != 'ja':
         break
 
 # Print de lijst van producten
-print("\nToegevoegde producten:")
+print('\nToegevoegde producten: ')
 for product in products:
     print(product)
 
@@ -118,63 +118,43 @@ with open('products.csv', "w", newline="") as csvfile:
 
 print(f"Productgegevens zijn opgeslagen in 'products.csv' {products}")
 
-# Opbrengst en winst over bepaalde periode vaststellen
+# Opbrengst en winst over bepaalde periode berekenen
 
 import pandas as pd
 
-# CSV-bestand inlezen
-csvfile = "products.csv"
-try:
-    data = pd.read_csv(csvfile)
-except FileNotFoundError:
-    print(f"Het bestand '{csvfile}' kon niet worden gevonden.")
-    exit()
+start_date = input('Voer de begindatum (YYYY-MM-DD) in van de periode waarover u opbrengst en winst wilt bereken. ')
+end_date = input('Voer de einddatum (YYYY-MM-DD) in van de periode waarover u opbrengst en winst wilt berekenen. ')
 
-# Datumkolommen omzetten naar datetime-formaat
-try:
-    data['bought_date'] = pd.to_datetime(data['bought_date'])
-    data['sell_date'] = pd.to_datetime(data['sell_date'])
-    data['expiration_date'] = pd.to_datetime(data['expiration_date'])
-except KeyError as e:
-    print(f"Verwachte kolom ontbreekt in het bestand: {e}")
-    exit()
+# Functie om opbrengst en winst te berekenen
+def calculate_revenue_and_profit(csv_file, start_date, end_date):
+    # Laad de CSV in een DataFrame
+    data = pd.read_csv(csv_file, parse_dates=['bought_date', 'sell_date', 'expiration_date'])
+    
+    # Filter de gegevens op basis van de opgegeven periode
+    filtered_data = data[(data['sell_date'] >= start_date) & (data['sell_date'] <= end_date)]
+    
+    # Bereken totale opbrengst
+    total_revenue = filtered_data['sell_price'].sum()
+    
+    # Bereken totale kosten (van de verkochte producten in de periode)
+    total_cost = filtered_data['bought_price'].sum()
+    
+    # Bereken winst
+    total_profit = total_revenue - total_cost
+    
+    return total_revenue, total_profit
 
-# Winst berekenen
-try:
-    data['winst'] = data['sell_price'] - data['bought_price']
-except KeyError as e:
-    print(f"Verwachte kolom ontbreekt in het bestand: {e}")
-    exit()
+# CSV-bestand en tijdsperiode opgeven
+csv_file = 'products.csv'  # Vervang door het pad naar je eigen CSV-bestand
 
-# Periode opvragen van de gebruiker
-while True:
-    try:
-        start_datum = pd.to_datetime(input('Wat is de startdatum (YYYY-MM-DD) van de periode waarover u de opbrengst en winst wilt weten? '))
-        eind_datum = pd.to_datetime(input('Wat is de einddatum (YYYY-MM-DD) van de periode waarover u de opbrengst en winst wilt weten? '))
-        if start_datum > eind_datum:
-            print("De startdatum kan niet na de einddatum liggen. Probeer het opnieuw.")
-            continue
-        break
-    except ValueError:
-        print("Ongeldige invoer. Gebruik het formaat YYYY-MM-DD.")
+# Functie aanroepen
+revenue, profit = calculate_revenue_and_profit(csv_file, start_date, end_date)
 
-# Data filteren binnen de opgegeven periode
-gefilterde_data = data[(data['sell_date'] >= start_datum) & (data['sell_date'] <= eind_datum)]
-
-# Opbrengst en winst berekenen
-if not gefilterde_data.empty:
-    totale_opbrengst = gefilterde_data['sell_price'].sum()
-    totale_winst = gefilterde_data['winst'].sum()
-
-    print(f"\nResultaten voor de periode van {start_datum.date()} tot {eind_datum.date()}:")
-    print(f"Totale opbrengst: €{totale_opbrengst:.2f}")
-    print(f"Totale winst: €{totale_winst:.2f}")
-else:
-    print(f"Geen verkopen gevonden tussen {start_datum.date()} en {eind_datum.date()}.")
-
+print(f"Totaal opbrengst: €{revenue:.2f}")
+print(f"Totaal winst: €{profit:.2f}")
+'''    
 import numpy as np
 import matplotlib.pyplot as plt
-'''
 with open('data/small.txt', 'r') as f:
     data = np.genfromtxt(f, dtype='datetime64[s],f,f,f', 
                          names=['date', 'revenue', 'profit'])
@@ -248,5 +228,46 @@ plt.tight_layout()
 # Toon de grafiek
 plt.show()
 
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Set file path for data
+#file_path = 'data/small.txt'
+
+# Define data type for reading the file
+dtype = [('date', 'datetime64[s]'), ('revenue', 'f4'), ('profit', 'f4')]
+
+# Read the file
+try:
+    # Reading the file using np.genfromtxt
+    data = np.genfromtxt(file_path, delimiter=',', dtype=dtype, names=True)
+    
+    # Extract data columns
+    datetime = data['date']
+    revenue = data['revenue']
+    profit = data['profit']
+    
+    # Plot revenue and profit over time
+    plt.figure(figsize=(10, 6))
+    plt.plot(datetime, revenue, label='Revenue', marker='o')
+    plt.plot(datetime, profit, label='Profit', marker='s')
+    
+    # Add labels, title, legend, and grid
+    plt.title('Revenue and Profit Over Time')
+    plt.xlabel('Date')
+    plt.ylabel('Values (€)')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    
+    # Show the plot
+    plt.show()
+
+except FileNotFoundError:
+    print(f"File {file_path} not found. Ensure the path is correct.")
+except ValueError as e:
+    print(f"Data format issue: {e}")
+'''
 if __name__ == "__main__":
     main()
