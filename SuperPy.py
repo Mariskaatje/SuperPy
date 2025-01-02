@@ -172,7 +172,6 @@ if not gefilterde_data.empty:
 else:
     print(f"Geen verkopen gevonden tussen {start_datum.date()} en {eind_datum.date()}.")
 
-
 import numpy as np
 import matplotlib.pyplot as plt
 '''
