@@ -1,6 +1,6 @@
 SUPERPY
 
-Met deze applicatie kunt u een voorraad van producten beheren, bijvoorbeeld de inventaris van een supermarkt. Informatie over de produten en de aan-, verkoop- en houdbaarheidsdatum kunnen verwerkt worden. Producten die over de houdbaarheidsdatum zijn worden uit het bestand verwijdederd. De datum kan kunstmatig naar voren geschoven worden om een beeld van de toekomst te verkrijgen. 
+Met deze applicatie kunt u een voorraad van producten beheren, bijvoorbeeld de inventaris van een supermarkt. Informatie over de produten en de aan-, verkoop- en houdbaarheidsdatum kunnen verwerkt worden. Producten die over de houdbaarheidsdatum zijn worden uit het bestand verwijderd. De datum kan kunstmatig naar voren geschoven worden om een beeld van de toekomst te verkrijgen. 
 
 De volgende gegevens worden verwerkt:
 
@@ -18,4 +18,4 @@ De volgende eigenschappen zijn ingebouwd:
 
 Met Matplotlib worden de opbrengst en winst over een bepaalde periode gevisualiseerd. Deze periode kan zelf ingesteld worden. De gegevens worden weergegeven in een lijngrafiek met maandelijkse meetpunten.
 
-Met behulp van de mudule Rich, het onderdeel print, zijn kleuren in de tekst aangebracht wat de leesbaarheid bbevorderd.
+Met behulp van de mudule Rich, het onderdeel print, zijn kleuren in de tekst aangebracht wat de leesbaarheid bevorderd.
