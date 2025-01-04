@@ -1,4 +1,6 @@
-SUPERPY
+<span style="background-color:light-yellow; padding:2px;">
+
+##SUPERPY
 
 Met deze applicatie kunt u een voorraad van producten beheren, bijvoorbeeld de inventaris van een supermarkt. Informatie over de produten en de aan-, verkoop- en houdbaarheidsdatum kunnen verwerkt worden. Producten die over de houdbaarheidsdatum zijn worden uit het bestand verwijderd. De datum kan kunstmatig naar voren geschoven worden om een beeld van de toekomst te verkrijgen. 
 
