@@ -13,9 +13,9 @@ Met deze applicatie kunt u een voorraad van producten beheren, bijvoorbeeld de i
 
 * Het vaststellen en vooruitzetten van de datum.
 * Het bijhouden van de aan- en verkoop van producten op een bepaalde datum.
-* Het weergeven van de opbrengst en de winst over een bepaalde tijdsperiode.
+* Het weergeven van de totale opbrengst en de winst over een bepaalde tijdsperiode.
 * Het exporteren van selecties aan data naar CSV-files.
 
 Met Matplotlib worden de opbrengst en winst over een bepaalde periode gevisualiseerd. Deze periode kan zelf ingesteld worden. De gegevens worden weergegeven in een lijngrafiek met maandelijkse meetpunten.
 
-Met behulp van de mudule Rich, het onderdeel print, zijn kleuren in de tekst aangebracht wat de leesbaarheid bevorderd.
+Met behulp van de mudule Rich, het onderdeel print, zijn kleuren in de tekst van de terminal aangebracht wat de leesbaarheid bevorderd.
