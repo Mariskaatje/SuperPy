@@ -14,7 +14,7 @@ Met deze applicatie kunt u een voorraad van producten beheren, bijvoorbeeld de i
 * Het vaststellen en vooruitzetten van de datum.
 * Het bijhouden van de aan- en verkoop van producten op een bepaalde datum.
 * Het weergeven van de totale opbrengst en de winst over een bepaalde tijdsperiode.
-* Het exporteren van selecties aan data naar CSV-files.
+* Het exporteren van selecties aan data naar een CSV-file.
   
 Door middel van de module Argparse kunnen de commando's in de commandline in de terminal worden ingevoerd.
 
