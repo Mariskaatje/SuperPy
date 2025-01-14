@@ -10,26 +10,7 @@ import os
 __winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
 __human_name__ = "superpy"
 
-# Functie om datum aan te passen
-def adjust_date(current_date=None):
-    if not current_date:
-        current_date = datetime.now()
-    while True:
-        datum_vooruit = input('Wilt u de datum vooruit zetten? (ja/nee) ').strip().lower()
-        if datum_vooruit == 'nee':
-            print(f'De datum blijft: {current_date.strftime("%Y-%m-%d")}')
-            return current_date
-        elif datum_vooruit == 'ja':
-            try:
-                number = int(input('Hoeveel dagen wilt u de datum vooruit zetten? '))
-                new_date = current_date + timedelta(days=number)
-                print(f'Nieuwe datum: {new_date.strftime("%Y-%m-%d")}')
-                return new_date
-            except ValueError:
-                print('Ongeldige invoer. Voer een geldig getal in.')
-        else:
-            print('Ongeldige invoer. Probeer opnieuw.')
-
+# Functie om producten toe te voegen
 def add_products_to_csv(file_name='products.csv'):
     products = []
     today = date.today()
@@ -85,7 +66,6 @@ def add_products_to_csv(file_name='products.csv'):
                 except ValueError as e:
                     print(f'Fout: {e}. Probeer opnieuw.')
 
-        # Voeg het product toe aan de lijst
         products.append({
             'id': id,
             'product_name': product_name,
@@ -96,11 +76,9 @@ def add_products_to_csv(file_name='products.csv'):
             'sell_price': sell_price
         })
 
-        # Vraag de gebruiker of er meer producten moeten worden toegevoegd
         if input('Wilt u nog een product toevoegen? (ja/nee): ').strip().lower() != 'ja':
             break
 
-    # Schrijf producten naar CSV-bestand
     file_exists = os.path.exists(file_name)
     with open(file_name, mode='a', newline='', encoding='utf-8') as file:
         fieldnames = ['id', 'product_name', 'bought_date', 'bought_price', 'expiration_date', 'sell_date', 'sell_price']
@@ -111,39 +89,70 @@ def add_products_to_csv(file_name='products.csv'):
 
     print(f"Alle producten zijn opgeslagen in {file_name}.")
 
-# Functie om totale omzet en winst over bepaalde peeriode te berekenen
-def calculate_revenue_and_profit(csv_file, start_date, end_date):
+# Functie om totale omzet en winst te berekenen
+def calculate_total_revenue_and_profit(file_name, start_date, end_date):
     try:
-        # Read CSV file
-        data = pd.read_csv(csv_file, parse_dates=['bought_date', 'sell_date', 'expiration_date'])
+        data = pd.read_csv(file_name, parse_dates=['bought_date', 'sell_date', 'expiration_date'])
+        data['sell_price'] = pd.to_numeric(data['sell_price'], errors='coerce')
+        data['bought_price'] = pd.to_numeric(data['bought_price'], errors='coerce')
         data = data.dropna(subset=['sell_price', 'bought_price', 'sell_date'])
+
         filtered_data = data[(data['sell_date'] >= start_date) & (data['sell_date'] <= end_date)]
-        revenue = filtered_data['sell_price'].sum()
-        profit = revenue - filtered_data['bought_price'].sum()
-        return revenue, profit
+        total_revenue = filtered_data['sell_price'].sum()
+        total_profit = total_revenue - filtered_data['bought_price'].sum()
+        return total_revenue, total_profit
     except Exception as e:
-        print(f"Fout bij berekening: {e}")
+        print(f"Er is een fout opgetreden: {e}")
         return None, None
 
-# Functie om maandelijkse omzet en winst te berekenen
+# Functie om maandelijkse gegevens te berekenen
 def calculate_monthly_revenue_and_profit(file_name, start_date, end_date):
     try:
+        # Lees het CSV-bestand en parseer datums
         df = pd.read_csv(file_name, parse_dates=['bought_date', 'sell_date', 'expiration_date'])
+        
+        # Controleer op verplichte kolommen
+        required_columns = ['bought_date', 'sell_date', 'expiration_date', 'sell_price', 'bought_price']
+        if not all(col in df.columns for col in required_columns):
+            raise ValueError(f"Het bestand mist verplichte kolommen: {required_columns}")
+        
+        # Converteer waarden naar numeriek en drop lege rijen
+        df['sell_price'] = pd.to_numeric(df['sell_price'], errors='coerce')
+        df['bought_price'] = pd.to_numeric(df['bought_price'], errors='coerce')
+        df = df.dropna(subset=['sell_price', 'bought_price'])
+
+        # Filter verlopen producten uit
+        today = pd.Timestamp.today()
+        df = df[df['sell_price'] != 'expired']  # Verwijder expliciet als het gemarkeerd is als 'expired'
+        df = df[df['sell_date'] <= df['expiration_date']]  # Verwijder als verkoopdatum na houdbaarheidsdatum is
+
+        # Voeg een nieuwe kolom toe voor winst
         df['profit'] = df['sell_price'] - df['bought_price']
+        
+        # Filter de data op datumrange
         mask = (df['sell_date'] >= start_date) & (df['sell_date'] <= end_date)
         filtered_df = df[mask]
+
+        if filtered_df.empty:
+            print("Geen gegevens gevonden voor de opgegeven periode.")
+            return None
+        
+        # Groepeer per maand
         filtered_df['month'] = filtered_df['sell_date'].dt.to_period('M')
         monthly_data = filtered_df.groupby('month').agg(
             revenue=('sell_price', 'sum'),
             profit=('profit', 'sum')
         ).reset_index()
+        
+        # Converteer maand naar timestamp voor consistente weergave
         monthly_data['month'] = monthly_data['month'].dt.to_timestamp()
         return monthly_data
+
     except Exception as e:
         print(f"Fout bij berekening: {e}")
         return None
 
-# Lijngrafiek van omzet en winst met maandelijkse meetpunten
+# Grafiek weergeven
 def plot_revenue_and_profit(monthly_data):
     plt.figure(figsize=(10, 6))
     plt.plot(monthly_data['month'], monthly_data['revenue'], label='Omzet', marker='o', linestyle='-')
@@ -157,73 +166,44 @@ def plot_revenue_and_profit(monthly_data):
     plt.xticks(rotation=45)
     plt.show()
 
-# Main functie
+# Main functie met argparse
 def main():
-    current_date = adjust_date()
-    action = input("Wilt u producten toevoegen (1), maandgegevens berekenen (2) of totale omzet en winst berekenen (3)? ").strip()
+    parser = argparse.ArgumentParser(description="Superpy voorraadbeheer.")
+    parser.add_argument('--action', type=str, required=True, choices=['add', 'calculate', 'monthly'], 
+                        help='Kies een actie: add (producten toevoegen), calculate (totale omzet en winst berekenen), monthly (maandgegevens berekenen).')
+    parser.add_argument('--start_date', type=str, help='Begindatum in het formaat YYYY-MM-DD.')
+    parser.add_argument('--end_date', type=str, help='Einddatum in het formaat YYYY-MM-DD.')
+    parser.add_argument('--file_name', type=str, default='products.csv', help='De naam van het CSV-bestand.')
     
-    if action == "1":
-        add_products_to_csv()
-    elif action == "2":
-        file_name = 'products.csv'
-        if not os.path.exists(file_name):
-            print(f"Het bestand '{file_name}' bestaat niet. Voeg eerst producten toe.")
+    args = parser.parse_args()
+
+    if args.action == 'add':
+        add_products_to_csv(args.file_name)
+
+    elif args.action == 'calculate':
+        if not (args.start_date and args.end_date):
+            print("Voor de actie 'calculate' zijn --start_date en --end_date vereist.")
             return
 
-        start_date = pd.to_datetime(input('Voer de begindatum (YYYY-MM-DD) in van de periode waarover u de omzet en winst zien wilt '))
-        end_date = pd.to_datetime(input('Voer de einddatum (YYYY-MM-DD) in van de periode waarover u de omzet en winst zien wilt '))
-        monthly_data = calculate_monthly_revenue_and_profit(file_name, start_date, end_date)
+        start_date = pd.to_datetime(args.start_date)
+        end_date = pd.to_datetime(args.end_date)
+        total_revenue, total_profit = calculate_total_revenue_and_profit(args.file_name, start_date, end_date)
+        if total_revenue is not None and total_profit is not None:
+            print(f"Totale omzet van {start_date.date()} tot {end_date.date()}: €{total_revenue:.2f}")
+            print(f"Totale winst van {start_date.date()} tot {end_date.date()}: €{total_profit:.2f}")
+
+    elif args.action == 'monthly':
+        if not (args.start_date and args.end_date):
+            print("Voor de actie 'monthly' zijn --start_date en --end_date vereist.")
+            return
+
+        start_date = pd.to_datetime(args.start_date)
+        end_date = pd.to_datetime(args.end_date)
+        monthly_data = calculate_monthly_revenue_and_profit(args.file_name, start_date, end_date)
         if monthly_data is not None and not monthly_data.empty:
             print("Maandelijkse omzet en winst:")
             print(monthly_data)
             plot_revenue_and_profit(monthly_data)
-        else:
-            print('Geen gegevens beschikbaar voor de opgegeven periode.')
-
-    elif action == "3":
-        # Bereken de totale omzet en winst voor de opgegeven periode
-        file_name = 'products.csv'
-        if not os.path.exists(file_name):
-            print(f"Het bestand '{file_name}' bestaat niet. Voeg eerst producten toe.")
-            return
-
-        start_date = pd.to_datetime(input('Voer de begindatum (YYYY-MM-DD) in van de periode waarover u de omzet berekenen wilt '))
-        end_date = pd.to_datetime(input('Voer de einddatum (YYYY-MM-DD) in van de periode waarover u de omzet en winst berekenen wilt '))
-        
-        total_revenue, total_profit = calculate_total_revenue_and_profit(file_name, start_date, end_date)
-        if total_revenue is not None and total_profit is not None:
-            print(f"Totale omzet van {start_date.date()} tot {end_date.date()}: €{total_revenue:.2f}")
-            print(f"Totale winst van {start_date.date()} tot {end_date.date()}: €{total_profit:.2f}")
-        else:
-            print('Er was een probleem bij het berekenen van de totale omzet en winst.')
-
-def calculate_total_revenue_and_profit(file_name, start_date, end_date):
-   
-    try:
-        # CSV-bestand inlezen en data voorbereiden
-        data = pd.read_csv(file_name, parse_dates=['bought_date', 'sell_date', 'expiration_date'])
-
-        # Zorg ervoor dat kolommen numeriek zijn
-        data['sell_price'] = pd.to_numeric(data['sell_price'], errors='coerce')
-        data['bought_price'] = pd.to_numeric(data['bought_price'], errors='coerce')
-
-        # Verwijder rijen zonder essentiële gegevens
-        data = data.dropna(subset=['sell_price', 'bought_price', 'sell_date'])
-
-        # Filter op periode
-        start_date = pd.to_datetime(start_date)
-        end_date = pd.to_datetime(end_date)
-        filtered_data = data[(data['sell_date'] >= start_date) & (data['sell_date'] <= end_date)]
-
-        # Berekening van omzet en winst
-        total_revenue = filtered_data['sell_price'].sum()
-        total_profit = total_revenue - filtered_data['bought_price'].sum()
-
-        return total_revenue, total_profit
-
-    except Exception as e:
-        print(f"Er is een fout opgetreden: {e}")
-        return None, None
 
 if __name__ == '__main__':
     main()
