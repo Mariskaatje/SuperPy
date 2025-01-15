@@ -1,4 +1,3 @@
-# Imports
 import argparse
 import csv
 from datetime import datetime, timedelta, date
@@ -9,6 +8,18 @@ import os
 
 __winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
 __human_name__ = "superpy"
+
+# Functie voor datumweergave
+def show_today_date():
+    today = date.today()
+    datetime_to_string = today.strftime('%Y-%m-%d')
+    print(f'Het is vandaag: {datetime_to_string}')
+
+# Functie voor het verschuiven van de datum
+def shift_today_date(days_forward=0):
+    today = date.today()
+    adjusted_today = today + timedelta(days=days_forward)
+    print(f"De datum is opgeschoven naar: {adjusted_today.strftime('%Y-%m-%d')}")
 
 # Functie om producten toe te voegen
 def add_products_to_csv(file_name='products.csv'):
@@ -169,10 +180,11 @@ def plot_revenue_and_profit(monthly_data):
 # Main functie met argparse
 def main():
     parser = argparse.ArgumentParser(description="Superpy voorraadbeheer.")
-    parser.add_argument('--action', type=str, required=True, choices=['add', 'calculate', 'monthly'], 
-                        help='Kies een actie: add (producten toevoegen), calculate (totale omzet en winst berekenen), monthly (maandgegevens berekenen).')
+    parser.add_argument('--action', type=str, required=True, choices=['add', 'calculate', 'monthly', 'show_today', 'shift_date'], 
+                        help='Kies een actie: add (producten toevoegen), calculate (totale omzet en winst berekenen), monthly (maandgegevens berekenen), show_today (datum weergeven), shift_date (datum vooruit schuiven), show_today (huidige datum tonen).')
     parser.add_argument('--start_date', type=str, help='Begindatum in het formaat YYYY-MM-DD.')
     parser.add_argument('--end_date', type=str, help='Einddatum in het formaat YYYY-MM-DD.')
+    parser.add_argument('--number_of_days', type=int, help='Aantal dagen dat de datum vooruit geschoven moet.')
     parser.add_argument('--file_name', type=str, default='products.csv', help='De naam van het CSV-bestand.')
     
     args = parser.parse_args()
@@ -205,5 +217,16 @@ def main():
             print(monthly_data)
             plot_revenue_and_profit(monthly_data)
 
-if __name__ == '__main__':
+    elif args.action == 'show_today':
+        today = date.today()
+        show_today_date()
+            
+    elif args.action == 'shift_date':
+        if args.number_of_days is None:
+           print("Voor de actie 'shift_date' is --number_of_days vereist.")
+           return
+        today = date.today()
+        shift_today_date(args. number_of_days)
+
+if __name__ == '__main__': 
     main()
